@@ -16,52 +16,58 @@ ActiveRecord::Schema.define(version: 20140128205156) do
   enable_extension "plpgsql"
 
   create_table "albums", force: :cascade do |t|
-    t.integer "artist_id"
+    t.bigint "artist_id"
     t.string "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["artist_id"], name: "index_albums_on_artist_id"
   end
 
   create_table "artists", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "genres", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "media_types", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "playlists", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "playlists_tracks", force: :cascade do |t|
-    t.integer "playlist_id"
-    t.integer "track_id"
+    t.bigint "playlist_id"
+    t.bigint "track_id"
+    t.index ["playlist_id"], name: "index_playlists_tracks_on_playlist_id"
+    t.index ["track_id"], name: "index_playlists_tracks_on_track_id"
   end
 
   create_table "tracks", force: :cascade do |t|
-    t.integer "album_id"
-    t.integer "genre_id"
-    t.integer "media_type_id"
+    t.bigint "album_id"
+    t.bigint "genre_id"
+    t.bigint "media_type_id"
     t.string "name", null: false
     t.string "composer"
     t.integer "milliseconds", null: false
     t.integer "bytes"
     t.decimal "unit_price", precision: 10, scale: 2
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["album_id"], name: "index_tracks_on_album_id"
+    t.index ["genre_id"], name: "index_tracks_on_genre_id"
+    t.index ["media_type_id"], name: "index_tracks_on_media_type_id"
   end
 
 end
