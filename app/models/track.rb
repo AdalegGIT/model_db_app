@@ -5,16 +5,17 @@ class Track < ApplicationRecord
   # has_and_belongs_to_many :playlists
   SHORT = 180000
   LONG = 360000
-  def self.short
-    where("milliseconds < ?",SHORT)
-  end
 
-  def self.long
-    where("milliseconds >= ?",LONG)
-  end
-
-  def self.medium
-    where("milliseconds >= ?",SHORT).where("milliseconds < ?", LONG)
-    # where("milliseconds >= ? AND milliseconds < ?", 180000 , 360000)
-  end
+  
+  scope :starts_with, -> (char) {where('name ILIKE ?', "#{char}%")}
+  scope :short, -> {shorter_than(SHORT)}
+  scope :long, -> {longer_than_or_equal_to(LONG)}
+  scope :medium, -> {longer_than_or_equal_to(SHORT).shorter_than(LONG)}
+  scope :shorter_than, -> (milliseconds) {
+    where("milliseconds < ?", milliseconds) if (milliseconds && milliseconds > 0)
+    }
+  scope :longer_than_or_equal_to, -> (milliseconds) {
+    where("milliseconds >= ?",milliseconds) if (milliseconds && milliseconds > 0)
+  }
+  
 end
